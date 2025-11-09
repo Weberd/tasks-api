@@ -1,0 +1,32 @@
+FROM php:8.4-fpm
+
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpq-dev \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    libzip-dev \
+    librabbitmq-dev
+
+RUN docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd zip
+
+RUN pecl install amqp && docker-php-ext-enable amqp
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+RUN groupadd -g 1000 www
+RUN useradd -u 1000 -ms /bin/bash -g www www
+
+COPY . /var/www
+COPY --chown=www:www . /var/www
+
+RUN chown -R www:www /var/www
+
+USER www
+
+EXPOSE 9000
+CMD ["php-fpm"]
