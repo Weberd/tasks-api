@@ -46,7 +46,6 @@ class TaskApiTest extends TestCase
         $response = $this->withToken($this->user->api_token)
             ->getJson("/api/projects/{$this->project->id}/tasks");
 
-        var_dump($response->getContent());
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'success',
@@ -98,9 +97,7 @@ class TaskApiTest extends TestCase
             'status' => 'planned',
             'completion_date' => now()->format('Y-m-d'),
             'assignee_id' => $this->user->id,
-            'attachments' => [
-                UploadedFile::fake()->create('document.pdf', 100), // 100 KB
-            ],
+            'attachment' => UploadedFile::fake()->create('document.pdf', 100), // 100 KB,
         ];
 
         $response = $this->withToken($this->user->api_token)

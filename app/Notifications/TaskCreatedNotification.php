@@ -23,7 +23,6 @@ class TaskCreatedNotification extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
-        var_dump(2);
         return (new MailMessage)
             ->subject('New Task Assigned: ' . $this->task->title)
             ->greeting('Hello ' . $notifiable->name . '!')
