@@ -73,7 +73,7 @@ docker-compose exec app php artisan queue:work redis --queue=notifications
 Запуск тестов
 
 ```bash
-php artisan test
+docker-compose exec app php artisan test
 ```
 
 ## API Endpoints
