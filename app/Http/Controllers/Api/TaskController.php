@@ -15,6 +15,7 @@ use App\Services\TaskService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Date;
 
 class TaskController extends Controller
 {
@@ -34,7 +35,7 @@ class TaskController extends Controller
 
             foreach ($validated as $key => $value) {
                 if ($key === 'completion_date') {
-                    $filters[] = new TaskDateFilter($key, $value);
+                    $filters[] = new TaskDateFilter($key, Date::parse($value));
                 } else {
                     $filters[] = new TaskStringFilter($key, $value);
                 }

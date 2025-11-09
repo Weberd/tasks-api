@@ -87,6 +87,30 @@ class TaskApiTest extends TestCase
         $this->assertEquals('planned', $data[0]['status']);
     }
 
+    public function test_can_filter_tasks_by_completion_date(): void
+    {
+        $date = now()->format('Y-m-d');
+        $otherDate = now()->addDay()->format('Y-m-d');
+
+        Task::factory()->create([
+            'project_id' => $this->project->id,
+            'completion_date' => $date,
+        ]);
+
+        Task::factory()->create([
+            'project_id' => $this->project->id,
+            'completion_date' => $otherDate,
+        ]);
+
+        $response = $this->withToken($this->user->api_token)
+            ->getJson("/api/projects/{$this->project->id}/tasks?completion_date={$date}");
+
+        $response->assertStatus(200);
+        $data = $response->json('data');
+        $this->assertCount(1, $data);
+        $this->assertEquals($date, $data[0]['completion_date']);
+    }
+
     public function test_can_create_task(): void
     {
         Storage::fake('public');

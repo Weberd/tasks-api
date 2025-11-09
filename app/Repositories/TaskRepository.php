@@ -121,7 +121,7 @@ final class TaskRepository implements TaskRepositoryInterface
             $task->media->map(function ($media) {
                 return new MediaDto($media->id, $media->name, $media->file_name, $media->mime_type, $media->size);
             })->toArray(),
-            $task->completion_date,
+            $task->completion_date->format('Y-m-d'),
             $task->created_at,
             $task->updated_at,
         );

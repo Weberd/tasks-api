@@ -3,13 +3,13 @@
 namespace App\Dto\Task\Filters;
 
 use App\Dto\Task\Filters\Contracts\TaskFilterInterface;
-use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Carbon;
 
 class TaskDateFilter implements TaskFilterInterface
 {
     public function __construct(
         private readonly string $key,
-        private readonly Date $value
+        private readonly Carbon $value
     )
     {
     }
@@ -24,7 +24,7 @@ class TaskDateFilter implements TaskFilterInterface
         return $this->key;
     }
 
-    public function value(): Date
+    public function value(): Carbon
     {
         return $this->value;
     }
