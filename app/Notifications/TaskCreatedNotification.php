@@ -4,11 +4,10 @@ namespace App\Notifications;
 
 use App\Models\Task;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TaskCreatedNotification extends Notification implements ShouldQueue
+class TaskCreatedNotification extends Notification
 {
     use Queueable;
 
@@ -35,14 +34,5 @@ class TaskCreatedNotification extends Notification implements ShouldQueue
                 return $mail->line('Due Date: ' . $this->task->completion_date->format('Y-m-d'));
             })
             ->action('View Task', url('/tasks/' . $this->task->id));
-    }
-
-    public function toArray(object $notifiable): array
-    {
-        return [
-            'task_id' => $this->task->id,
-            'task_title' => $this->task->title,
-            'project_name' => $this->task->project->name,
-        ];
     }
 }
