@@ -85,7 +85,7 @@ class TaskController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Task created successfully',
-                'data' => new TaskResource($task),
+                'data' => new TaskResource($this->taskService->getTask($task->id)),
             ], 201);
         } catch (Exception $e) {
             return response()->json([

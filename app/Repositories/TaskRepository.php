@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Dto\Media\MediaDto;
 use App\Dto\Project\ProjectDto;
-use App\Dto\Task\Filters\TaskDateFilter;
 use App\Dto\Task\Filters\TaskFilterType;
 use App\Dto\Task\TaskCreationRequest;
 use App\Dto\Task\TaskDto;
@@ -14,6 +13,7 @@ use App\Models\Task;
 use App\Repositories\Contracts\TaskRepositoryInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 final class TaskRepository implements TaskRepositoryInterface
 {
@@ -83,11 +83,21 @@ final class TaskRepository implements TaskRepositoryInterface
 
     public function attachFile(int $id, $file): void
     {
-        DB::transaction(function () use ($id, $file) {
-            $task = Task::where('id', $id)->lockForUpdate()->firstOrFail();
-            $task->addMedia($file)->toMediaCollection('attachments');
-            $task->load('media');
-        });
+        $tempPath = Storage::path($file->store('temp'));
+
+        try {
+            DB::transaction(function () use ($id, $tempPath) {
+                $task = Task::where('id', $id)->lockForUpdate()->firstOrFail();
+
+                $task->addMedia($tempPath)
+                    ->toMediaCollection('attachments');
+            });
+        } catch (\Throwable $e) {
+            Storage::delete($tempPath);
+            throw $e;
+        }
+
+        Storage::delete($tempPath);
     }
 
     public function detachFile(int $id, int $mediaId): void
@@ -109,7 +119,7 @@ final class TaskRepository implements TaskRepositoryInterface
             new UserDto($task->assignee->name, $task->assignee->email),
             new ProjectDto($task->project->name, $task->project->description),
             $task->media->map(function ($media) {
-                return new MediaDto($media->id, $media->file_name, $media->mime_type, $media->size);
+                return new MediaDto($media->id, $media->name, $media->file_name, $media->mime_type, $media->size);
             })->toArray(),
             $task->completion_date,
             $task->created_at,
