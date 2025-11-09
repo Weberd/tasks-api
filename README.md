@@ -7,7 +7,7 @@ Laravel-приложение для управления задачами с т�
 - PHP 8.2
 - Laravel 11
 - PostgreSQL 15.0
-- RabbitMQ 3
+- Redis
 - Docker & Docker Compose
 - Spatie Media Library
 
