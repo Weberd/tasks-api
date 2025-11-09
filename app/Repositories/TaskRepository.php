@@ -119,9 +119,9 @@ final class TaskRepository implements TaskRepositoryInterface
             new UserDto($task->assignee->name, $task->assignee->email),
             new ProjectDto($task->project->name, $task->project->description),
             $task->media->map(function ($media) {
-                return new MediaDto($media->id, $media->name, $media->file_name, $media->mime_type, $media->size);
+                return new MediaDto($media->id, $media->name, $media->file_name, $media->mime_type, $media->size, $media->getUrl());
             })->toArray(),
-            $task->completion_date->format('Y-m-d'),
+            !is_null($task->completion_date) ? $task->completion_date->format('Y-m-d'): $task->completion_date,
             $task->created_at,
             $task->updated_at,
         );
