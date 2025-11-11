@@ -6,14 +6,14 @@ use App\Dto\User\UserCreateDto;
 use App\Dto\User\UserTokenDto;
 use App\Dto\User\UserLoginDto;
 use App\Repositories\Contracts\UserRepositoryInterface;
-use App\Services\Contracts\Contracts\UserServiceInterface;
+use App\Services\Contracts\UserServiceInterface;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class UserService implements UserServiceInterface
+readonly class UserService implements UserServiceInterface
 {
     public function __construct(
-        private readonly UserRepositoryInterface $userRepository,
+        private UserRepositoryInterface $userRepository,
     )
     {
     }
