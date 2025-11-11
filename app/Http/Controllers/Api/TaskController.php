@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Date;
 class TaskController extends Controller
 {
     public function __construct(
-        protected TaskService $taskService
+        protected TaskServiceInterface $taskService
     ) {}
 
     /**
