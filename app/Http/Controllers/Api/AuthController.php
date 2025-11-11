@@ -9,6 +9,7 @@ use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Services\Contracts\UserServiceInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Exception;
@@ -76,7 +77,12 @@ class AuthController extends Controller
                     'message' => 'Invalid credentials',
                 ], 401);
             }
-        } catch (\Exception $e) {
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid credentials',
+            ], 401);
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
             ], 500);

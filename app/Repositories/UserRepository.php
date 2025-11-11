@@ -34,7 +34,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function get(int $id): UserTokenDto
     {
-        $user = User::where('id', $id)->first();
+        $user = User::where('id', $id)->firstOrFail();
 
         return new UserTokenDto(
             $user->id,
@@ -46,6 +46,6 @@ class UserRepository implements UserRepositoryInterface
 
     public function getIdByEmail(string $email): int
     {
-        return User::where('email', $email)->value('id');
+        return User::where('email', $email)->firstOrFail()->id;
     }
 }

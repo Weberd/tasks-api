@@ -10,7 +10,7 @@ use App\Services\Contracts\UserServiceInterface;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-readonly class UserService implements UserServiceInterface
+final readonly class UserService implements UserServiceInterface
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,
@@ -28,8 +28,8 @@ readonly class UserService implements UserServiceInterface
 
     public function login(UserLoginDto $loginDto): bool
     {
-        $hash = $this->userRepository->getPasswordHash($loginDto->email);
-        return Hash::check($hash, $loginDto->password);
+        $hash = $this->userRepository->getPasswordHash($this->get($loginDto->email)->id);
+        return Hash::check($loginDto->password, $hash);
     }
 
     public function logout(mixed $user): void
