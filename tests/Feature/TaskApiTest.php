@@ -232,7 +232,7 @@ class TaskApiTest extends TestCase
                     'title' => $task->title,
                     'description' => $task->description,
                     'status' => $task->status,
-                    'completion_date' => $task->completion_date?->toISOString(),
+                    'completion_date' => $task->completion_date?->format('Y-m-d'),
                     'project' => [
                         'name' => $task->project->name,
                         'description' => $task->project->description,
