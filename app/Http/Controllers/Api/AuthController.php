@@ -8,9 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Resources\UserResource;
-use App\Services\Contracts\Contracts\UserServiceInterface;
+use App\Services\Contracts\UserServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Exception;
 
 class AuthController extends Controller
 {
@@ -94,7 +95,7 @@ class AuthController extends Controller
                 'success' => true,
                 'message' => 'Logout successful',
             ], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
             ], 500);
